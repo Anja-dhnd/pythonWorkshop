@@ -53,3 +53,35 @@ pprint(results[:5], width=100)
 
 df = pd.DataFrame.from_records(results)
 df.head()
+
+# creating new label to simplify values
+
+df['label'] = 0
+df.loc[df['compound'] > 0.2, 'label'] = 1
+df.loc[df['compound'] < -0.2, 'label'] = -1
+
+df2 = df[['headline', 'label']]
+
+df2.to_csv('reddit_headlines_labels.csv', encoding ='utf-8', index =False)
+
+df.label.value_counts()
+
+df.label.value_counts(normalize=True) * 100
+
+print('Positive headlines:\n')
+pprint(list(df[df['label'] == 1].headline)[:5], width=200)
+
+print('\nNegative headlines:\n')
+pprint(list(df[df['label'] == -1].headline)[:5], width=200)
+
+# graph 
+
+fig, ax = plt.subplots(figsize=(8,8))
+counts = df.label.value_counts(normalize=True) * 100
+
+sns.barplot(x=counts.index, y=counts, ax=ax)
+
+ax.set_xticklabels(['Negative', 'Neutral', 'Positive'])
+ax.set_ylabel('Percentage')
+
+plt.show()

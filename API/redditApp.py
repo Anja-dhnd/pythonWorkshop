@@ -28,10 +28,10 @@ for submission in reddit.subreddit('politics').hot(limit=None):
     # break
 print(len(headlines))
 
-
 df = pd.DataFrame(headlines)
 df.head()
 # print(df)
+
 
 df.to_csv('headlines.csv', header=False, encoding='utf-8', index=False)
 

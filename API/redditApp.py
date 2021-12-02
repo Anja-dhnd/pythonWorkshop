@@ -15,17 +15,11 @@ reddit = praw.Reddit(
     user_agent=user_agent
 )
 # scrapping data
-headlines = set()
-for submission in reddit.subreddit('politics').hot(limit=None):
-    headlines.add(submission.title)
-    # print(submission.title)
-    # print(submission.id)
-    # print(submission.author)
-    # print(submission.created_utc)
-    # print(submission.score)
-    # print(submission.upvote_ratio)
-    # print(submission.url)
-    # break
+headlines = {
+    submission.title
+    for submission in reddit.subreddit('politics').hot(limit=None)
+}
+
 print(len(headlines))
 
 df = pd.DataFrame(headlines)
@@ -33,7 +27,7 @@ df.head()
 # print(df)
 
 
-df.to_csv('headlines.csv', header=False, encoding='utf-8', index=False)
+# df.to_csv('headlines.csv', header=False, encoding='utf-8', index=False)
 
 
 nltk.download('vader_lexicon')
@@ -46,7 +40,7 @@ for line in headlines:
     pol_score = sia.polarity_scores(line) # return a dico
     pol_score['headline'] = line
     results.append(pol_score)
-    
+
 pprint(results[:5], width=100)
 
 # putting results in a frame
